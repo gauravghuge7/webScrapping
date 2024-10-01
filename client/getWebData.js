@@ -4,6 +4,11 @@ const xlsx = require('xlsx');
 
 const url = 'https://www.mahindra.com/';
 
+
+const headings = [];
+const numbers = [];
+const imageUrls = [];
+
 const getDataFromWeb = () => {
 
   axios.get(url)
@@ -12,7 +17,7 @@ const getDataFromWeb = () => {
       const $ = cheerio.load(html);
 
       // Extract all headings
-      const headings = [];
+
       $('h1, h2, h3, h4, h5, h6').each((index, element) => {
         headings.push($(element).text().trim());
       });
@@ -60,7 +65,20 @@ const getDataFromWeb = () => {
 
 }
 
-getDataFromWeb();  // get the data from the web
+
+
+console.log(headings);
+console.log(numbers); 
+console.log(imageUrls);
+
+window.onload = function() {
+
+  getDataFromWeb();  // get the data from the web
+
+}
+
+
+
 
 
 module.exports = {

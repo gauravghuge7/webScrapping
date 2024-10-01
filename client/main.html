@@ -1,31 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Document</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excel Data Display</title>
+    <script src="../website_data_detailed.xlsx"></script>
 </head>
 <body>
 
-   <header>
-      <nav>
-         <h1>Web Data Extractor</h1>
-         <button id="dashboard-btn">Dashboard</button>
-         <button id="get-data-btn">Get Data</button>
-      </nav>
-
-   </header>
 
 
-   <main>
-      
-   </main>
+   <h1>Upload Excel File to Display Data</h1>
+   <input type="file" id="excelFile" />
+   <table border="1" id="excel-table"></table>
 
 
-   <script
-      src="./getWebData.js"
-   >
 
-   </script>
+   <script src="./main.js"> </script>
+
 </body>
 </html>
