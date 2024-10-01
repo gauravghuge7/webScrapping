@@ -1,0 +1,27 @@
+/* Header */
+.header {
+   background-color: #007bff;
+   padding: 15px;
+   color: white;
+   text-align: center;
+   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.header nav {
+   display: flex;
+   justify-content: center;
+}
+
+.header nav a {
+   color: white;
+   text-decoration: none;
+   margin: 0 15px;
+   font-size: 18px;
+   padding: 10px;
+   transition: background-color 0.3s ease;
+   border-radius: 5px;
+}
+
+.header nav a:hover {
+   background-color: #0056b3;
+}

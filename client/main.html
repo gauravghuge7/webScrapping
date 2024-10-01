@@ -5,57 +5,92 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Excel Data Dashboard</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <link rel="stylesheet" href="./index.css">
+    <link rel="stylesheet" href="./CSS/header.css">
 </head>
 <body>
 
+<header class="header">
+    <nav>
+        <a href="#" class="nav-link" data-file="./dataFiles/dashboard.html">DashBoard</a>
+        <a href="#" class="nav-link" data-file="./dataFiles/excelData.html">ExcelData</a>
+        <a href="#" class="nav-link" data-file="./public/website_data.xml">XmlData</a>
+        <a href="#" class="nav-link" data-file="./dataFiles/contact.html">Contact</a>
+    </nav>
+</header>
 
-   <h1>Excel Data Dashboard</h1>
+<main id="main-data">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <h2>Dashboard</h2>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#analytics">Analytics</a></li>
+            <li><a href="#reports">Reports</a></li>
+            <li><a href="#settings">Settings</a></li>
+        </ul>
+    </aside>
 
-   <!-- Button to fetch Excel file -->
-   <button onclick="fetchExcel()">Fetch Excel Data</button>
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <h1>Dashboard Overview</h1>
+            <button class="profile-btn">Profile</button>
+        </div>
 
-   <!-- Table to display Excel data -->
-   <table border="1" id="excel-table"></table>
+        <!-- Cards -->
+        <div class="card-container">
+            <div class="card">
+                <h3>Total Users</h3>
+                <p id="totalUsers">Loading...</p>
+            </div>
+            <div class="card">
+                <h3>Active Sessions</h3>
+                <p id="activeSessions">Loading...</p>
+            </div>
+            <div class="card">
+                <h3>Revenue</h3>
+                <p id="revenue">Loading...</p>
+            </div>
+            <div class="card">
+                <h3>Pending Tasks</h3>
+                <p id="pendingTasks">Loading...</p>
+            </div>
+        </div>
 
-   <script>
-      // Fetch the Excel file from the server
-      function fetchExcel() {
-         fetch(' http://localhost:3000/download-excel')
-               .then(response => response.arrayBuffer())
-               .then(data => {
-                  const workbook = XLSX.read(data, { type: 'array' });
-                  const firstSheetName = workbook.SheetNames[0];
-                  const worksheet = workbook.Sheets[firstSheetName];
+        <!-- Dynamic Content Section -->
+        <div id="contentContainer" class="content-section">
+            <h2>Welcome to the Dashboard</h2>
+            <p>Select a section to view its content.</p>
+        </div>
+    </div>
+</main>
 
-                  // Convert the sheet data to JSON
-                  const jsonData = XLSX.utils.sheet_to_json(worksheet);
+<script src="./ExcelData/excel.js"></script>
+<script src="./DashBoard/script.js"></script>
 
-                  // Display data in the table
-                  const table = document.getElementById('excel-table');
-                  let tableHTML = '<tr>';
+<script>
+    // JavaScript for loading HTML files
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent the default anchor click behavior
+            const file = this.getAttribute('data-file'); // Get the file name from data attribute
 
-                  // Generate table headers
-                  Object.keys(jsonData[0]).forEach(key => {
-                     tableHTML += `<th>${key}</th>`;
-                  });
-                  tableHTML += '</tr>';
+            fetch(file) // Fetch the selected file
+                .then(response => {
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    return response.text();
+                })
+                .then(html => {
+                    document.getElementById('contentContainer').innerHTML = html; // Load the content into the container
+                })
+                .catch(error => {
+                    console.error('Error fetching the file:', error);
+                });
+        });
+    });
+</script>
 
-                  // Generate table rows
-                  jsonData.forEach(row => {
-                     tableHTML += '<tr>';
-                     Object.values(row).forEach(value => {
-                           tableHTML += `<td>${value}</td>`;
-                     });
-                     tableHTML += '</tr>';
-                  });
-
-                  // Insert the generated table HTML into the table element
-                  table.innerHTML = tableHTML;
-               })
-               .catch(error => {
-                  console.error('Error fetching Excel file:', error);
-               });
-      }
-   </script>
 </body>
 </html>
