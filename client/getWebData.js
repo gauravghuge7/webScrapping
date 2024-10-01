@@ -71,6 +71,9 @@ console.log(headings);
 console.log(numbers); 
 console.log(imageUrls);
 
+
+
+
 window.onload = function() {
 
   getDataFromWeb();  // get the data from the web

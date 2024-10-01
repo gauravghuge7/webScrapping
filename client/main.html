@@ -3,20 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Excel Data Display</title>
-    <script src="../website_data_detailed.xlsx"></script>
+    <title>Excel Data Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
 
 
+   <h1>Excel Data Dashboard</h1>
 
-   <h1>Upload Excel File to Display Data</h1>
-   <input type="file" id="excelFile" />
+   <!-- Button to fetch Excel file -->
+   <button onclick="fetchExcel()">Fetch Excel Data</button>
+
+   <!-- Table to display Excel data -->
    <table border="1" id="excel-table"></table>
 
+   <script>
+      // Fetch the Excel file from the server
+      function fetchExcel() {
+         fetch(' http://localhost:3000/download-excel')
+               .then(response => response.arrayBuffer())
+               .then(data => {
+                  const workbook = XLSX.read(data, { type: 'array' });
+                  const firstSheetName = workbook.SheetNames[0];
+                  const worksheet = workbook.Sheets[firstSheetName];
 
+                  // Convert the sheet data to JSON
+                  const jsonData = XLSX.utils.sheet_to_json(worksheet);
 
-   <script src="./main.js"> </script>
+                  // Display data in the table
+                  const table = document.getElementById('excel-table');
+                  let tableHTML = '<tr>';
 
+                  // Generate table headers
+                  Object.keys(jsonData[0]).forEach(key => {
+                     tableHTML += `<th>${key}</th>`;
+                  });
+                  tableHTML += '</tr>';
+
+                  // Generate table rows
+                  jsonData.forEach(row => {
+                     tableHTML += '<tr>';
+                     Object.values(row).forEach(value => {
+                           tableHTML += `<td>${value}</td>`;
+                     });
+                     tableHTML += '</tr>';
+                  });
+
+                  // Insert the generated table HTML into the table element
+                  table.innerHTML = tableHTML;
+               })
+               .catch(error => {
+                  console.error('Error fetching Excel file:', error);
+               });
+      }
+   </script>
 </body>
 </html>
